@@ -587,6 +587,12 @@ def find_graphviz():
         else:
             #Just in case, try the default...
             path = r"C:\Program Files\att\Graphviz\bin"
+        # last resort
+        if not os.path.isdir(path):
+            search_dirs = [os.environ[d] for d in ("appdata", "programfiles", "programfiles(x86)")]
+            candidate_folders = [d+"\\"+di for d in search_dirs for di in os.listdir(d)]
+            result = [d for d in candidate_folders if "graphviz" in d.lower()]
+            path = result[-1] + r"\bin" if result else path
 
         progs = __find_executables(path)
 
